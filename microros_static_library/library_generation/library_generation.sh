@@ -8,10 +8,24 @@ export BASE_PATH=/project/$MICROROS_LIBRARY_FOLDER
 apt update
 apt install -y gcc-arm-none-eabi
 
+rm -fr /uros_ws/firmware
+
 cd /uros_ws
 
 source /opt/ros/$ROS_DISTRO/setup.bash
 source install/local_setup.bash
+
+
+# Fix rmw_test_fixture error: insert colcon ignore into create_firmware script
+PKG_PREFIX=$(ros2 pkg prefix micro_ros_setup)
+SCRIPT_PATH="${PKG_PREFIX}/lib/micro_ros_setup/create_firmware_ws.sh"
+if ! grep -q "rmw_test_fixture/COLCON_IGNORE" "$SCRIPT_PATH"; then
+    echo "Applying build fix: Injecting COLCON_IGNORE block before colcon build..."
+    sed -i '/colcon build/i \        touch ros2/ament_cmake_ros/rmw_test_fixture/COLCON_IGNORE' "$SCRIPT_PATH"
+    echo "Patch applied successfully."
+else
+    echo "Fix already present, skipping patch."
+fi
 
 ros2 run micro_ros_setup create_firmware_ws.sh generate_lib
 
