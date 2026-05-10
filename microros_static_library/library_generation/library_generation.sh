@@ -41,7 +41,7 @@ popd > /dev/null
 
 ######## Trying to retrieve CFLAGS ########
 pushd /project > /dev/null
-export RET_CFLAGS=$(make print_cflags)
+export RET_CFLAGS=$(make -C Makefile/CM4 --no-print-directory print_cflags)
 RET_CODE=$?
 
 if [ $RET_CODE = "0" ]; then
