@@ -3,3 +3,7 @@ repositories:
     type: git
     url: https://github.com/ros-controls/control_msgs
     version: master
+  robotarm_interface:
+    type: git
+    url: https://github.com/ruben01egle/robotarm_interface.git
+    version: main
