@@ -1,0 +1,28 @@
+{
+    "name": "STM32 micro-ROS Jazzy",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "runArgs": [
+        "--privileged"
+    ],
+    "containerEnv": {
+        "MICROROS_LIBRARY_FOLDER": "micro_ros_stm32cubemx_utils/microros_static_library"
+    },
+    "mounts": [
+        "source=${localWorkspaceFolder}/..,target=/project,type=bind"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.makefile-tools"
+            ],
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash"
+            }
+        }
+    },
+    "remoteUser": "root",
+    "workspaceFolder": "/project"
+}
