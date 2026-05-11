@@ -66,12 +66,20 @@ size_t cubemx_transport_write(struct uxrCustomTransport* transport, uint8_t * bu
 size_t cubemx_transport_read(struct uxrCustomTransport* transport, uint8_t* buf, size_t len, int timeout, uint8_t* err){
 
     int ret = 0;
-    //set timeout
-    struct timeval tv_out;
-    tv_out.tv_sec = timeout / 1000;
-    tv_out.tv_usec = (timeout % 1000) * 1000;
-    setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO,&tv_out, sizeof(tv_out));
-    ret = recv(sock_fd, buf, len, MSG_WAITALL);
+    if (timeout == 0) {
+        ret = recv(sock_fd, buf, len, MSG_DONTWAIT);
+    }
+    else {
+        struct timeval tv_out;
+        if (timeout == 0) {
+            timeout = 1;
+        }
+        tv_out.tv_sec = timeout / 1000;
+        tv_out.tv_usec = (timeout % 1000) * 1000;
+        setsockopt(sock_fd, SOL_SOCKET, SO_RCVTIMEO,&tv_out, sizeof(tv_out));
+        ret = recv(sock_fd, buf, len, MSG_WAITALL);
+    }
+    
     size_t readed = ret > 0 ? ret : 0;
     return readed;
 }
